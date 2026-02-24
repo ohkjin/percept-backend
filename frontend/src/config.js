@@ -1,0 +1,27 @@
+// URL root of the backend server, which runs by default on port 8000 of the
+// local machine. However, for production it is recommended to set-up Apache or
+// nginx as a reverse proxy.
+// const backendURL = 'http://localhost:8000/api/v1';
+// Replace the URL below with YOUR actual copied address from the Ports tab
+const backendURL = 'https://solid-palm-tree-q7qw66qqxj7rf6576-8000.app.github.dev/api/v1';
+
+// After a rating button is pushed, this is the number of milliseconds to wait
+// before allowing another button push. To prevent accidental clicks.
+const buttonReenableTimeout = 1000;
+
+// The person responsible for managing GDPR related issues.
+const gdprControllerName = "My Name";
+
+// The contact e-mail for said GDPR manager.
+const gdprControllerEmail = "My E-mail Address";
+
+// Number of times to ask a participant to rate images in a given category.
+const maximumRatingsPerCategory = 20;
+
+// Currency symbol to use.
+const currency='€';
+
+// END OF CONFIGURATION
+
+// Export configuration:
+module.exports = { backendURL, buttonReenableTimeout, gdprControllerName, gdprControllerEmail, maximumRatingsPerCategory, currency }
