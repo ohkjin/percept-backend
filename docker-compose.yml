@@ -1,0 +1,44 @@
+services:
+  # The Detached Database
+  db:
+    image: postgis/postgis:16-3.4
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=percept_db
+    ports:
+      - "5432:5432"
+    # saving data on disk
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # This saves your data on your "disk"
+
+  # The Backend
+  backend:
+    build: .
+    environment:
+      - DATABASE_URL=postgres://postgres:password@db:5432/percept_db
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=percept_db
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  # The Frontend
+  frontend:
+    build: ./frontend
+    # to hush the frontend
+    environment:
+      - CI=true
+      - ESLINT_NO_DEV_ERRORS=true
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+# THIS IS THE MISSING PART:
+volumes:
+  postgres_data:

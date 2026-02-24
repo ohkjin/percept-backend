@@ -23,6 +23,38 @@ For example:
 
 You will need to populate the database with imagery. A recommended way to do that is to use the [vsvi-filter](https://github.com/Spatial-Data-Science-and-GEO-AI-Lab/percept-vsvi-filter) to create SQL files with INSERT statements. Those SQL files can be placed in the `seeds/dev`, `seeds/test`, or `seeds/prod` directory depending on whether you want to use the imagery for development, testing or production purposes. The database migration scripts `db-up.sh` and `db-down.sh` (described below) will then pick them up automatically.
 
+## Frontend/backend configuration
+
+The React frontend makes API calls to `backendURL` (configured in
+`frontend/src/config.js`).  By default that points at
+`http://localhost:8000/api/v1`, which works when you run the backend locally
+and access the UI on the same machine.  When the app is served remotely the
+browser will resolve `localhost` to itself and requests will fail with
+`TypeError: Failed to fetch` (as seen in the GitHub Codespaces preview).  To
+avoid this:
+
+1. run the backend on a publicly forwarded port and set
+   `REACT_APP_BACKEND_URL` before starting the frontend, e.g.:
+   ```bash
+   REACT_APP_BACKEND_URL="https://myhost.example.com/api/v1" npm run dev
+   ```
+2. or configure the dev server proxy in `frontend/package.json`:
+   ```json
+   {
+     "proxy": "http://localhost:8000"
+   }
+   ```
+   and use the default `backendURL` value (`/api/v1`) or make
+   `backendURL` relative.
+3. in production serve the frontend and backend from the same origin via a
+   reverse proxy (nginx/Apache) so that `/api/v1` is handled by the Express
+   server.
+
+> ⚠️ The `Failed to fetch` error usually means the browser could not reach the
+> backend at the URL configured in `frontend/src/config.js`.  Check that the
+> server is running and that `backendURL` is reachable from the client.
+
+
 ## Available Scripts
 
 In the project directory, you can run:

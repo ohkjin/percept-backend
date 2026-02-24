@@ -3,7 +3,7 @@ const { body, validationResult } = require('express-validator');
 const cors = require('cors');
 const { Pool } = require('pg')
 const Router = require('express-promise-router')
-const { dbname, dbhost, testdbname, testdbhost } = require('./config.js');
+const { dbname, dbhost, dbuser, dbpass, testdbname, testdbhost } = require('./config.js');
 const DOMPurify = require('isomorphic-dompurify');
 
 const app = express();
@@ -14,7 +14,7 @@ let pool;
 if (process.env.NODE_ENV === 'test') {
   pool = new Pool({database: testdbname, host: testdbhost});
 } else {
-  pool = new Pool({database: dbname, host: dbhost});
+  pool = new Pool({database: dbname, host: dbhost, user: dbuser, password: dbpass});
 }
 
 const router = new Router()

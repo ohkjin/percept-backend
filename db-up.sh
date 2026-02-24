@@ -1,19 +1,31 @@
 #!/bin/bash
 shopt -s globstar
 
-if [ -n "$1" ]; then
-  kind="$1"
-else
-  kind="dev"
-fi
+# if [ -n "$1" ]; then
+#   kind="$1"
+# else
+#   kind="dev"
+# fi
 
-db=percept-"$kind"
+# db=percept-"$kind"
+
+# for f in migrations/**/up.sql; do
+#   psql -f "$f" "$db"
+# done
+
+# for f in seeds/{"$kind",all}/**/*.sql; do
+#   psql -f "$f" "$db"
+# done
+
+db=percept_db  # Updated to match the dbname in config.js
 
 
+# For Docker use
+# ... inside the loops ...
 for f in migrations/**/up.sql; do
-  psql -f "$f" "$db"
+  psql -U postgres -f "$f" "$db"  # Added -U postgres
 done
 
 for f in seeds/{"$kind",all}/**/*.sql; do
-  psql -f "$f" "$db"
+  psql -U postgres -f "$f" "$db"  # Added -U postgres
 done
